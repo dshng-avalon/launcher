@@ -13,15 +13,14 @@ from . import control, terminal, lib
 
 QML_IMPORT_DIR = lib.resource("qml")
 APP_PATH = lib.resource("qml", "main.qml")
-ICON_PATH = lib.core_resource("icons", "png", "avalon-logo-16.png")
-SPLASH_PATH = lib.core_resource("icons", "png", "splash.png")
+ICON_PATH = lib.core_resource("icons", "png", "studio-logo-16.png")
+SPLASH_PATH = lib.core_resource("icons", "png", "studio-splash.png")
 
 # TODO: Re-implement icons of tray menu after resolving #323
 # Issue 323: https://github.com/getavalon/core/issues/323
 
 
 class Application(QtWidgets.QApplication):
-
     def __init__(self, root, source):
         super(Application, self).__init__(sys.argv)
         self.setWindowIcon(QtGui.QIcon(ICON_PATH))
@@ -36,8 +35,9 @@ class Application(QtWidgets.QApplication):
         engine.warnings.connect(self.on_warnings)
         engine.addImportPath(QML_IMPORT_DIR)
 
-        self._splash.showMessage("Connecting database...",
-                                 QtCore.Qt.AlignBottom, QtCore.Qt.black)
+        self._splash.showMessage(
+            "Connecting database...", QtCore.Qt.AlignBottom, QtCore.Qt.black
+        )
 
         try:
             io.install()
@@ -46,10 +46,12 @@ class Application(QtWidgets.QApplication):
 
         # Install actions
         from . import install
+
         install()
 
-        self._splash.showMessage("Starting Avalon Launcher...",
-                                 QtCore.Qt.AlignBottom, QtCore.Qt.black)
+        self._splash.showMessage(
+            "Starting Studio Launcher...", QtCore.Qt.AlignBottom, QtCore.Qt.black
+        )
 
         terminal.init()
 
@@ -86,7 +88,7 @@ class Application(QtWidgets.QApplication):
     def init_tray(self):
 
         tray = QtWidgets.QSystemTrayIcon(self.windowIcon(), parent=self)
-        tray.setToolTip("Avalon Launcher")
+        tray.setToolTip("Studio Launcher")
 
         # Build the right-mouse context menu for the tray icon
         menu = QtWidgets.QMenu()
@@ -130,7 +132,7 @@ class Application(QtWidgets.QApplication):
         self._tray = tray
 
         tray.show()
-        tray.showMessage("Avalon", "Launcher tray started.", 500)
+        tray.showMessage("Studio", "Launcher tray started.", 500)
 
 
 def main(root, demo=False):
@@ -138,6 +140,6 @@ def main(root, demo=False):
 
     root = os.path.realpath(root)
 
-    print("Starting avalon-launcher")
+    print("Starting studio-launcher")
     app = Application(root, APP_PATH)
     return app.exec_()
